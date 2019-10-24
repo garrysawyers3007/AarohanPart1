@@ -8,6 +8,25 @@
     android:padding="20dp"
     tools:context=".MainActivity">
 
+
+    <TextView
+        android:id="@+id/txt_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="12sp"
+        android:text="Path of file"/>
+    <Button
+        android:id="@+id/btn_filePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:onClick="chooseFile"
+        android:text="Pick File"
+        android:textSize="15sp" />
+
+
     <EditText
         android:id="@+id/txt_message"
         android:layout_width="match_parent"
@@ -15,14 +34,14 @@
         android:layout_marginTop="10dp"
         android:gravity="top"
         android:hint="Enter Message"
-        android:textSize="22sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/show_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textSize="22sp"
+        android:textSize="12sp"
         android:text="Your Message "/>
 
     <Button
@@ -31,7 +50,7 @@
         android:layout_marginTop="10dp"
         android:onClick="btn_print_name"
         android:text="Add Name"
-        android:textSize="25sp"
+        android:textSize="15sp"
         tools:ignore="HardcodedText" />
 
     <Button
@@ -40,7 +59,7 @@
         android:layout_marginTop="10dp"
         android:onClick="btn_print_number"
         android:text="ADD Number"
-        android:textSize="25sp" />
+        android:textSize="15sp" />
 
     <Button
         android:layout_width="match_parent"
@@ -48,7 +67,7 @@
         android:layout_marginTop="10dp"
         android:onClick="btn_send"
         android:text="Send"
-        android:textSize="25sp" />
+        android:textSize="15sp" />
 
 
 </LinearLayout>

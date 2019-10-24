@@ -1,28 +1,61 @@
 package com.example.android.aarohanpart1;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Message;
 import android.telephony.SmsManager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
+    public void chooseFile(View view) {
+
+        //open file manager
+        Intent myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        //select which type of file you wanna select
+        myFileIntent.setType("*/*");
+        startActivityForResult(myFileIntent,10);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        switch (requestCode){
+            case 10:
+
+                if(resultCode ==RESULT_OK){
+
+                    //it wiil get the path which is selected
+                    String path = data.getData().getPath();
+                    //now display path of file
+                    TextView txt_pathShow = (TextView)findViewById(R.id.txt_path);
+                    txt_pathShow.setText(path);
+                }
+
+                break;
+        }
+    }
+
+
+
 
     String finalMessage = "";
     String name = " Naman ";
@@ -97,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
 
 
 }

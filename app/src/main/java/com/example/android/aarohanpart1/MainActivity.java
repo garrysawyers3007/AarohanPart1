@@ -90,10 +90,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             File excel = new File(pathName);
 
-            FileInputStream fis;
 
-
-            fis = new FileInputStream(excel);  //error line
+            FileInputStream fis = new FileInputStream(excel);  //error line
 
             TextView txt_pathShow = (TextView) findViewById(R.id.txt_path);
             txt_pathShow.setText("i am here");

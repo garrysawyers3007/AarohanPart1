@@ -18,6 +18,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Iterator;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -26,28 +50,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+//CHOOSING FILE CODE STARTS FROM HERE
+
     public void chooseFile(View view) {
 
         //open file manager
         Intent myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         //select which type of file you wanna select
         myFileIntent.setType("*/*");
-        startActivityForResult(myFileIntent,10);
+        startActivityForResult(myFileIntent, 10);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        switch (requestCode){
+        switch (requestCode) {
             case 10:
 
-                if(resultCode ==RESULT_OK){
+                if (resultCode == RESULT_OK) {
 
-                    //it wiil get the path which is selected
-                    String path = data.getData().getPath();
+                    //it will get the path which is selected
+                    String pathName = data.getData().getPath();
                     //now display path of file
-                    TextView txt_pathShow = (TextView)findViewById(R.id.txt_path);
-                    txt_pathShow.setText(path);
+
+
+                    readFile(pathName);
                 }
 
                 break;
@@ -55,6 +82,75 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+//CHOOSING FILE CODE OVER
+
+// READING FILE CODE STARTS
+    private void readFile(String pathName) {
+
+        try {
+            File excel = new File(pathName);
+
+            FileInputStream fis;
+
+
+            fis = new FileInputStream(excel);  //error line
+
+            TextView txt_pathShow = (TextView) findViewById(R.id.txt_path);
+            txt_pathShow.setText("i am here");
+
+            XSSFWorkbook book = new XSSFWorkbook(fis);
+
+            XSSFSheet sheet = book.getSheetAt(0);
+
+
+            Iterator<Row> itr = sheet.iterator();
+
+
+
+            // Iterating over Excel file in Java
+            while (itr.hasNext()) {
+                Row row = itr.next();
+
+                // Iterating over each column of Excel file
+                Iterator<Cell> cellIterator = row.cellIterator();
+                while (cellIterator.hasNext()) {
+
+                    Cell cell = cellIterator.next();
+
+                    switch (cell.getCellType()) {
+                        case Cell.CELL_TYPE_STRING:
+
+                            display(cell.getStringCellValue() + "\t");
+                            break;
+                        case Cell.CELL_TYPE_NUMERIC:
+                            display(cell.getNumericCellValue() + "\t");
+                            break;
+                        case Cell.CELL_TYPE_BOOLEAN:
+                            display(cell.getBooleanCellValue() + "\t");
+                            break;
+                        default:
+
+                    }
+                }
+                display("");
+            }
+
+
+
+            // Close workbook, OutputStream and Excel file to prevent leak
+            book.close();
+            fis.close();
+
+        } catch (FileNotFoundException fe) {
+            fe.printStackTrace();
+        } catch (IOException ie) {
+            ie.printStackTrace();
+        }
+    }
+
+//READING EXCEL FILE CODE OVER
+
+// CODE FOR SENDING MESSAGE STARTS FROM HERE
 
 
     String finalMessage = "";
@@ -130,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
 
 }

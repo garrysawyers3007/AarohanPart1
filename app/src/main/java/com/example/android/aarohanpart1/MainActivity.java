@@ -1,46 +1,37 @@
 package com.example.android.aarohanpart1;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.os.Message;
-import android.telephony.SmsManager;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Iterator;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -70,11 +61,12 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
 
                     //it will get the path which is selected
-                    String pathName = data.getData().getPath();
+                    String pathName1 = data.getData().getPath();
                     //now display path of file
+                    String[] pathName = pathName1.split("t1");
 
+                    readFile(pathName[1]);
 
-                    readFile(pathName);
                 }
 
                 break;
@@ -84,25 +76,22 @@ public class MainActivity extends AppCompatActivity {
 
 //CHOOSING FILE CODE OVER
 
-// READING FILE CODE STARTS
+    // READING FILE CODE STARTS
     private void readFile(String pathName) {
 
         try {
-            File excel = new File(pathName);
 
+            File excel = new File(pathName);
 
             FileInputStream fis = new FileInputStream(excel);  //error line
 
-            TextView txt_pathShow = (TextView) findViewById(R.id.txt_path);
-            txt_pathShow.setText("i am here");
-
+            Log.d("Error","Error");
             XSSFWorkbook book = new XSSFWorkbook(fis);
 
             XSSFSheet sheet = book.getSheetAt(0);
 
 
             Iterator<Row> itr = sheet.iterator();
-
 
 
             // Iterating over Excel file in Java
@@ -134,17 +123,63 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-
             // Close workbook, OutputStream and Excel file to prevent leak
             book.close();
             fis.close();
 
         } catch (FileNotFoundException fe) {
-            fe.printStackTrace();
+
         } catch (IOException ie) {
             ie.printStackTrace();
         }
     }
+
+    //new file reader code
+//    public void ExcelReader(String pathName) {
+//
+//        try {
+//            String SAMPLE_XLSX_FILE_PATH = "excelFile/example.xlsx";
+//
+//            // Creating a Workbook from an Excel file (.xls or .xlsx)
+//            Workbook workbook = WorkbookFactory.create(new File(SAMPLE_XLSX_FILE_PATH));
+//            TextView txt_pathShow = (TextView) findViewById(R.id.txt_path);
+//            txt_pathShow.setText("i am here");
+//
+//
+//            //Iterating over all the rows and columns in a Sheet
+//            Sheet sheet = workbook.getSheetAt(0);
+//
+//            // Create a DataFormatter to format and get each cell's value as String
+//            DataFormatter dataFormatter = new DataFormatter();
+//
+//            System.out.println("\n\nIterating over Rows and Columns using Iterator\n");
+//            Iterator<Row> rowIterator = sheet.rowIterator();
+//            while (rowIterator.hasNext()) {
+//                Row row = rowIterator.next();
+//
+//                // Now let's iterate over the columns of the current row
+//                Iterator<Cell> cellIterator = row.cellIterator();
+//
+//                while (cellIterator.hasNext()) {
+//                    Cell cell = cellIterator.next();
+//                    String cellValue = dataFormatter.formatCellValue(cell);
+//                    System.out.print(cellValue + "\t");
+//                }
+//                System.out.println();
+//            }
+//            // Closing the workbook
+//            workbook.close();
+//
+//        }catch (FileNotFoundException fe) {
+//
+//        } catch (IOException ie) {
+//
+//        } catch (InvalidFormatException e) {
+//        }
+//
+//    }
+
+    //ends  --- new file reader code
 
 //READING EXCEL FILE CODE OVER
 

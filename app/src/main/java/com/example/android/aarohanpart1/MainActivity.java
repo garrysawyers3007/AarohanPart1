@@ -1,8 +1,10 @@
 package com.example.android.aarohanpart1;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -47,9 +49,13 @@ public class MainActivity extends AppCompatActivity {
 
         //open file manager
         Intent myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        //Intent myFileIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+        //myFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
         //select which type of file you wanna select
         myFileIntent.setType("*/*");
-        startActivityForResult(myFileIntent, 10);
+        //startActivityForResult(myFileIntent, 10);
+        startActivityForResult(myFileIntent,10);
     }
 
     @Override
@@ -63,13 +69,32 @@ public class MainActivity extends AppCompatActivity {
                     //it will get the path which is selected
                     String pathName1 = data.getData().getPath();
                     //now display path of file
-                    String[] pathName = pathName1.split("t1");
+                    //String[] pathName = pathName1.split("t1");
 
-                    readFile(pathName[1]);
+                    pathName1=pathName1.substring(pathName1.lastIndexOf('/')+1);
+
+                    Log.d("Filename",pathName1);
+
+                    readFile(this,pathName1);
 
                 }
 
+
                 break;
+            case 42:
+
+                if(resultCode==RESULT_OK){
+                    Uri uri;
+                    if(data!=null){
+                        uri=data.getData();
+
+                        //String pathname= FileUtils.getFileAbsolutePath(this,uri);
+
+                        String pathname=uri.getLastPathSegment();
+
+                        readFile(this,pathname);
+                    }
+                }
         }
     }
 
@@ -77,15 +102,18 @@ public class MainActivity extends AppCompatActivity {
 //CHOOSING FILE CODE OVER
 
     // READING FILE CODE STARTS
-    private void readFile(String pathName) {
+    private void readFile(Context context, String pathName) {
 
         try {
 
-            File excel = new File(pathName);
+            File excel = new File(context.getExternalFilesDir(null),pathName);
 
             FileInputStream fis = new FileInputStream(excel);  //error line
 
-            Log.d("Error","Error");
+            //Log.d("Error","Error");
+
+            TextView text=findViewById(R.id.txt_path);
+            text.setText("File Found");
             XSSFWorkbook book = new XSSFWorkbook(fis);
 
             XSSFSheet sheet = book.getSheetAt(0);
@@ -128,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
             fis.close();
 
         } catch (FileNotFoundException fe) {
+            fe.printStackTrace();
 
         } catch (IOException ie) {
             ie.printStackTrace();
@@ -262,3 +291,5 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
+
+
